@@ -1,0 +1,10 @@
+{% extends "habits/base.html" %}  {# if you have a base template #}
+
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Login">
+  </form>
+{% endblock %}

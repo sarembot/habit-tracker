@@ -1,0 +1,16 @@
+{% extends "habits/base.html"  %}
+
+{% block content %}
+
+    <h2>The Last Habit Tracker You'll Ever Need</h2>
+    <p>Track your habits with ease. Increase productivity, hold yourself accountable, and get all of the little things done throughout your day.</p>
+    
+    <span>Features:</span>
+    <ul>
+        <li>Track as many habits as you'd like</li>   
+        <li>Simple analytics to visualize your progress</li>
+        <li>Free to use. No ads or trackers.</li>
+    </ul>
+    <a href = "{% url 'login' %}">Sign Up</a>
+
+{% endblock %}
