@@ -6,8 +6,10 @@
 <body>
     <header>
         <nav>
+            <a href="{% url 'home' %}">Home</a>
             {% if user.is_authenticated %}
                 Hello, {{ user.username }}!
+                <a href="{% url 'habits' %}">Your Habits</a>
                 <a href="{% url 'logout' %}">Logout</a>
             {% else %}
                 <a href="{% url 'login' %}">Login</a>

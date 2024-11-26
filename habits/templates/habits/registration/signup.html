@@ -1,0 +1,15 @@
+{% extends "habits/base.html" %}
+
+{% block content %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <h2>Sign Up</h2>
+    {% if form.errors %}
+        {{ form.errors }}
+    {% endif %}
+    {{ form.as_p }}
+    <input type="submit">
+  </form>
+    
+  
+{% endblock %}
