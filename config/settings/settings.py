@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from habits import backends
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -109,8 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Backends
 AUTHENTICATION_BACKENDS = [
-    'habits.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'habits.backends.EmailOrUsernameBackend',
 ]
 
 # Internationalization
