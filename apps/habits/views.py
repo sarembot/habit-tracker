@@ -1,16 +1,37 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginForm
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login
 
-# simple view that renders a template
+# request param contains all the info about the current HTTP request
+
+
 def home(request):
     return render(request, 'habits/home.html')
 
 def login(request):
-    return render(request, 'habits/registration/login.html')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                # user is found and password matches
+                auth_login(request, user) # create a session
+                return redirect('home')
+            else: 
+                # authentication failed
+                form.add_error(None, "Invalid username or password")
+
+    else:
+        form = LoginForm()
+    return render(request, 'habits/registration/login.html', {'form' : form})
 
 def signup(request):
-    if request.method == 'POST':
+    if request.method == 'POST': # handle form submission
         form = SignUpForm(request.POST)
         if form.is_valid():
             # Create new user
@@ -23,7 +44,7 @@ def signup(request):
             return redirect('success') # signup successful
         else:
             print(form.errors)
-    else:
+    else: # display empty form
         form = SignUpForm() 
     return render(request, 'habits/registration/signup.html', {'form': form})
 

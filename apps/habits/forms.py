@@ -1,6 +1,10 @@
 from django import forms
 from .models import Habit
 
+class LoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput, min_length=8)
+
 class SignUpForm(forms.Form):
     username = forms.CharField(max_length=150)
     email = forms.EmailField()
