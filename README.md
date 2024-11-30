@@ -39,6 +39,35 @@ graph TD
     F --> CC[production.txt]
 ```
 
+## Database Schema
+```mermaid
+erDiagram
+    User ||--o{ Habit : "creates"
+    Habit ||--o{ CompletedHabit : "tracks"
+
+    User {
+        string username
+        string email PK
+        string password
+        datetime date_joined
+    }
+
+    Habit {
+        int id PK
+        string name
+        datetime date_created
+        string frequency
+        int user_id FK
+    }
+
+    CompletedHabit {
+        int id PK
+        int habit_id FK
+        date completed_date
+    }
+```
+
+
 ## Setup Instructions
 1. Clone the repository
 2. Create a virtual environment
