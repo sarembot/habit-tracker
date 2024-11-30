@@ -1,2 +1,4 @@
+from .base import *
+
 DEBUG = False
-ALLOWED_HOSTS = [#insert domain here]
+ALLOWED_HOSTS = []

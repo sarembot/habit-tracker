@@ -1,3 +1,5 @@
+# Users create Habit, each time they complete a habit, it's recorded in CompletedHabit
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -29,14 +31,12 @@ class Habit(models.Model):
     
     # use choices when you want the value to be limited to certain responses
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES, default='daily')
-    
-    
+   
     user = models.ForeignKey(User, on_delete=models.CASCADE) #link habits to a user  
     
     # TODO: Methods - mark completed
 
-
-# keep track of completed habits
+# keep track of completed habits - use data for visualizations
 class CompletedHabit(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE)  
     completed_date = models.DateField(auto_now_add=True)

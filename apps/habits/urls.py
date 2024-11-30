@@ -1,5 +1,5 @@
 from django.urls import path, include
-from habits import views
+from apps.habits import views
 
 urlpatterns = [
     path('', views.home, name="home"),
