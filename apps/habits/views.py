@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, LoginForm
+from .forms import LoginForm, SignUpForm, HabitForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
 # request param contains all the info about the current HTTP request
 
@@ -13,7 +13,7 @@ def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            username = form.cleaned_data['username'] 
             password = form.cleaned_data['password']
 
             user = authenticate(request, username=username, password=password)
@@ -29,6 +29,14 @@ def login(request):
     else:
         form = LoginForm()
     return render(request, 'habits/registration/login.html', {'form' : form})
+
+def logout(request):
+    if request.method == 'POST':
+        # Clear sessions
+        auth_logout(request)
+        # Redirect to home page
+        return redirect('home')
+    return render(request, 'habits/registration/logout.html')
 
 def signup(request):
     if request.method == 'POST': # handle form submission
@@ -47,9 +55,11 @@ def signup(request):
     else: # display empty form
         form = SignUpForm() 
     return render(request, 'habits/registration/signup.html', {'form': form})
+    
 
 def success(request):
     return render(request, 'habits/registration/success.html')
+
 
 def habits(request):
     return render(request, 'habits/habits.html')

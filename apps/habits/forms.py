@@ -2,8 +2,8 @@ from django import forms
 from .models import Habit
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput, min_length=8)
+    username = forms.CharField(label='Username or Email')
+    password = forms.CharField(widget=forms.PasswordInput, label='Password' )
 
 class SignUpForm(forms.Form):
     username = forms.CharField(max_length=150)
