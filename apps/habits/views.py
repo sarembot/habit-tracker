@@ -32,9 +32,7 @@ def login(request):
 
 def logout(request):
     if request.method == 'POST':
-        # Clear sessions
         auth_logout(request)
-        # Redirect to home page
         return redirect('home')
     return render(request, 'habits/registration/logout.html')
 

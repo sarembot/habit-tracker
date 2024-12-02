@@ -1,13 +1,13 @@
 {% extends "habits/base.html" %}  
 
 {% block content %}
-  <h2>Logout</h2>
-  <div class="container">
-      <a href="home.html"></a>
+  <h2>Are you sure you want to logout?</h2>
+  <div>
+     <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <input type="submit">
+     </form> 
   </div>
-  <form method="post" action="% {url 'logout'} %">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit">
-  </form> 
+ 
+  <a href="{% url 'home'%}">No, take me home.</a>
 {% endblock %}
