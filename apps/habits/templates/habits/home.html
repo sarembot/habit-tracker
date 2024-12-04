@@ -11,6 +11,8 @@
         <li>Simple analytics to visualize your progress</li>
         <li>Free to use. No ads or trackers.</li>
     </ul>
-    <a href = "{% url 'signup' %}">Sign Up</a>
-
+    {% if not user.is_authenticated %}
+    <a href = "{% url 'signup' %}">Create an account</a>
+    {% endif %}
+    
 {% endblock %}

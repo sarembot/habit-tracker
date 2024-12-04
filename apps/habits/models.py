@@ -34,10 +34,13 @@ class Habit(models.Model):
    
     user = models.ForeignKey(User, on_delete=models.CASCADE) #link habits to a user  
     
-    # TODO: Methods - mark completed
 
 # keep track of completed habits - use data for visualizations
 class CompletedHabit(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE)  
     completed_date = models.DateField(auto_now_add=True)
+
+    # User marks a habit as complete
+    # Data sent to database
+    # Habit is displayed as complete - reset next day
 

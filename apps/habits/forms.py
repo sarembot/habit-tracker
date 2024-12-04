@@ -11,7 +11,12 @@ class SignUpForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput, min_length=8)
     password2 = forms.CharField(widget=forms.PasswordInput, min_length=8)
 
-class HabitForm(forms.ModelForm):
+class HabitForm(forms.ModelForm): #ModelForm automatically creates fields based on the model
+    frequency = forms.ChoiceField(
+        choices=Habit.FREQUENCY_CHOICES,
+        widget=forms.RadioSelect, # instead of default dropdown
+        initial='daily'
+    )
     class Meta:
         model = Habit
         fields = [

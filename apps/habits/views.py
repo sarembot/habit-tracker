@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm, SignUpForm, HabitForm
-from django.contrib.auth.models import User
+from .models import Habit, User
+# from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
 # request param contains all the info about the current HTTP request
@@ -9,6 +10,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 def home(request):
     return render(request, 'habits/home.html')
 
+# AUTHENTICATION
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -59,5 +61,15 @@ def success(request):
     return render(request, 'habits/registration/success.html')
 
 
+# HABITS
 def habits(request):
-    return render(request, 'habits/habits.html')
+    if request.method == 'POST':
+        form = HabitForm(request.POST)
+        if form.is_valid():
+            # Create new habit
+            habit = form.save(commit=False) # "pause" save 
+            habit.user = User.objects.get(id=request.user.id) # associate user with habit
+            habit.save() # complete save to db
+    else:
+        form = HabitForm()
+    return render(request, 'habits/habits.html', {'form': form})
