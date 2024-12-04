@@ -78,6 +78,23 @@ Represents a habit to track. Contains the habit's name, frequency (daily/weekly/
 Records each habit completion with a timestamp, enabling tracking of consistency and progress over time.
 This simple structure provides the foundation for tracking habits and analyzing user progress through data visualization.
 
+## Authentication
+Built with Django's authentication framework, enhanced with some custom features:
+- Login via username or email
+- Secure password requirements (min 9 chars)
+- Extended User model for future features
+- Session-based auth with CSRF protection
+- POST-based logout with confirmation
+
+### Routes
+```python
+urlpatterns = [
+    path('registration/login', views.login, name="login"),
+    path('registration/signup', views.signup, name="signup"),
+    path('registration/success', views.success, name="success")
+]
+```
+
 ## Setup Instructions
 1. Clone the repository
 2. Create a virtual environment
