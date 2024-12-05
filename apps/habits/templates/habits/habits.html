@@ -2,34 +2,34 @@
 
 {% block content %}
 <div class="container page">
-    <h2>Your Habits</h2>
+    <div class="container">
     <h3>Add New Habit</h3>
-    <form action="{% url 'habits' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form> 
-    <h3>Your Habits</h3>
-    <ul>
-        <table class="border">
-            <tr class="border">
-              <th class="border">Habit</th>
-              <th class="border">Day</th>
-              <th class="border">Day</th>
-              <th class="border">Day</th>
-              <th class="border">Day</th>
-              <th class="border">Day</th>
-              <th class="border">Day</th>
-              <th class="border">Day</th>
-            </tr>
-            {% for habit in habits %}
-            <tr class="border">
-                <td class="border">
-                    {{ habit.name }} 
-                </td>
-            </tr>
-            {% endfor %}
-          </table> 
-    </ul>
+        <form action="{% url 'habits' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit">
+        </form> 
+    </div>
+    <div class="container">
+        <h3>Current Habits</h3>
+        <ul>
+            <table class="border">
+                <tr class="border">
+                    <th class="border">Habit</th>
+                    {% for date in dates %}
+                    <th class="border">{{ date.date }}</th>
+                    {% endfor %}
+                </tr>
+                {% for habit in habits %}
+                <tr class="border">
+                    <td class="border">
+                        {{ habit.name }} 
+                    </td>
+                    <td>hi</td>
+                </tr>
+                {% endfor %}
+            </table> 
+        </ul>
+    </div>
 </div>
 {% endblock %}

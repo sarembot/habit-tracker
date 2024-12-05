@@ -8,3 +8,8 @@
 .page {
     margin-top: 4em;
 }
+
+.navbar {
+    z-index: 1;
+    overflow:hidden;
+}
