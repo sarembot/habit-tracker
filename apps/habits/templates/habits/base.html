@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
     <title>Habit Tracker</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-
+    
+    <link rel="stylesheet" href="/static/style.css">
     <title>{% block title %}Habit Tracker{% endblock %}</title>
 </head>
 <body>
-    <header class="mb-4 border">
-
-        <nav class="navbar fixed-top navbar-expand-md border">
+    <header class="p-0">
+        <nav class="navbar fixed-top navbar-expand-md border p-0 m-0">
             <div class="container-fluid">
                 <a class="navbar-brand fs-5" href="{% url 'home' %}">Habit Tracker</a>
-                <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler p-1 border-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon border-dark"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="container-fluid justify-content-end p-0">
@@ -43,7 +42,7 @@
                                 <a class="nav-link hover-transition" href="{% url 'login'%}">LOGIN</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link hover-transition" href="{% url 'home'%}">SIGNUP</a>
+                                <a class="nav-link hover-transition" href="{% url 'signup'%}">SIGNUP</a>
                             </li>
                         </ul>
                         {% endif %}
@@ -51,34 +50,7 @@
                 </div>
             </div>
           </nav>
-
-
-        <!-- <nav>
-            <div class="container">
-                {% if user.is_authenticated %}
-                <ul class="nav navbar">
-                    <li class="nav-item">
-                        Hello, {{ user.username }}!
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'habits' %}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                    </li>
-                </ul>
-                {% else %}
-                    <a href="{% url 'home'%}">Home</a>
-                    <a href="{% url 'login' %}">Login</a>
-                    <a href="{% url 'signup' %}">Sign up</a>
-                {% endif %}
-            </div>
-        </nav> -->
     </header>
-
     <main>
         {% block content %}
         {% endblock %}

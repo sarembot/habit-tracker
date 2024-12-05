@@ -1,7 +1,7 @@
 {% extends "habits/base.html"  %}
 
 {% block content %}
-
+<div class="container page">
     <h2>Your Habits</h2>
     <h3>Add New Habit</h3>
     <form action="{% url 'habits' %}" method="post">
@@ -29,9 +29,7 @@
                 </td>
             </tr>
             {% endfor %}
-          
           </table> 
-          
-       
     </ul>
+</div>
 {% endblock %}
