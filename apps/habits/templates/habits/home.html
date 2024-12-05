@@ -1,7 +1,7 @@
 {% extends "habits/base.html"  %}
 
 {% block content %}
-
+<div class="container mt-4">
     <h2>Habit Tracker</h2>
     <p>Track your habits with ease. Increase productivity, hold yourself accountable, and get all of the little things done throughout your day.</p>
     
@@ -14,5 +14,5 @@
     {% if not user.is_authenticated %}
     <a href = "{% url 'signup' %}">Create an account</a>
     {% endif %}
-    
+</div>
 {% endblock %}

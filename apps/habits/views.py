@@ -63,7 +63,7 @@ def signup(request):
 def success(request):
     return render(request, 'habits/registration/success.html')
 
-#------------------------------------------------------------------
+#----------------------------------------------------
 
 # HABITS
 @login_required

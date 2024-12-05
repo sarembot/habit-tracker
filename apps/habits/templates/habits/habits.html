@@ -11,29 +11,27 @@
     </form> 
     <h3>Your Habits</h3>
     <ul>
-        <table>
-            <tr>
-              <th>Habit</th>
-              <th>Day</th>
-              <th>Day</th>
-              <th>Day</th>
-              <th>Day</th>
-              <th>Day</th>
-              <th>Day</th>
-              <th>Day</th>
+        <table class="border">
+            <tr class="border">
+              <th class="border">Habit</th>
+              <th class="border">Day</th>
+              <th class="border">Day</th>
+              <th class="border">Day</th>
+              <th class="border">Day</th>
+              <th class="border">Day</th>
+              <th class="border">Day</th>
+              <th class="border">Day</th>
             </tr>
             {% for habit in habits %}
-            <tr>
-                <td>
-                    {{ habit.name }} {{ habit.frequency }}
+            <tr class="border">
+                <td class="border">
+                    {{ habit.name }} 
                 </td>
             </tr>
             {% endfor %}
           
           </table> 
           
-        {% for habit in habits %}
-         <li>{{ habit.name }} {{ habit.frequency }}</li>
-        {% endfor %}
+       
     </ul>
 {% endblock %}

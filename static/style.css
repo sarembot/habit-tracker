@@ -1,4 +1,5 @@
-/* * {
+* {
+    outline: 1px green dashed;
     box-sizing: border-box;
-    padding: 1.2em;
-} */
+    padding: 0.25em;
+}
