@@ -1,22 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <title>Habit Tracker</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
     <title>{% block title %}Habit Tracker{% endblock %}</title>
 </head>
 <body>
     <header>
         <nav>
-          
+            <div class="container">
             {% if user.is_authenticated %}
-            Hello, {{ user.username }}!
-                <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'habits' %}">Your Habits</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            <ul class="nav bg-primary">
+                <li class="nav-item">
+                    Hello, {{ user.username }}!
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'habits' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
             {% else %}
                 <a href="{% url 'home'%}">Home</a>
                 <a href="{% url 'login' %}">Login</a>
                 <a href="{% url 'signup' %}">Sign up</a>
             {% endif %}
+            </div>
         </nav>
     </header>
 
