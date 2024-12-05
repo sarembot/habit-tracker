@@ -13,3 +13,5 @@
     z-index: 1;
     overflow:hidden;
 }
+
+.nav-link, .nav-item, .navbar-nav { padding:0; }

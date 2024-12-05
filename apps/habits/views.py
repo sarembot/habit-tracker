@@ -80,6 +80,7 @@ def habits(request):
         date = today - timedelta(days=i) 
         dates.append(date)
     dates.reverse()
+    
     if request.method == 'POST':
         form = HabitForm(request.POST)
         if form.is_valid():
