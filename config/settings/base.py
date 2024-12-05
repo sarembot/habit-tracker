@@ -85,6 +85,7 @@ DATABASES = {
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Auth Settings
+AUTH_USER_MODEL = 'habits.User'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 

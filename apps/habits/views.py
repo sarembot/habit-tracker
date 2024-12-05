@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm, SignUpForm, HabitForm
 from .models import Habit, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+User = get_user_model()
+
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
@@ -56,20 +60,25 @@ def signup(request):
         form = SignUpForm() 
     return render(request, 'habits/registration/signup.html', {'form': form})
     
-
 def success(request):
     return render(request, 'habits/registration/success.html')
 
+#------------------------------------------------------------------
 
 # HABITS
+@login_required
 def habits(request):
+    User = get_user_model()
+    current_user = User.objects.get(id=request.user.id)
     if request.method == 'POST':
         form = HabitForm(request.POST)
         if form.is_valid():
             # Create new habit
             habit = form.save(commit=False) # "pause" save 
-            habit.user = User.objects.get(id=request.user.id) # associate user with habit
+            habit.user = current_user # associate user with habit
             habit.save() # complete save to db
+            return redirect('habits')
     else:
+        habits = Habit.objects.filter(user=current_user) # find user's habits
         form = HabitForm()
-    return render(request, 'habits/habits.html', {'form': form})
+    return render(request, 'habits/habits.html', {'form': form, 'habits': habits})

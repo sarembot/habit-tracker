@@ -3,14 +3,16 @@
 {% block content %}
 
     <h2>Your Habits</h2>
-    <li>
-
-    </li>
     <h3>Add New Habit</h3>
-   <form action="{% url 'habits' %}" method="post">
+    <form action="{% url 'habits' %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit">
     </form> 
-
+    <h3>Your Habits</h3>
+    <ul>
+        {% for habit in habits %}
+         <li>{{ habit.name }} {{ habit.frequency }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
