@@ -47,8 +47,15 @@
                         <form method="post" action="{% url 'completed' %}">
                             {% csrf_token %}
                             <input type="hidden" name="habit_id" value="{{ habit.id }}">
-                            <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}">
-                            <input type="submit" value="☐">
+                            <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}"> 
+                            
+                                                     
+                            {% if habit_completed %} 
+                                <input type="submit" value="&#9745;">
+                            {% else %}
+                                <input type="submit" value="&#9746;">
+                            {% endif %}
+                           
                         </form>
                     </td>
                     {% endfor %}

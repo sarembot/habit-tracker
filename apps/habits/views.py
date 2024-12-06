@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm, SignUpForm, HabitForm, CompletedForm
-from .models import Habit, User
+from .models import Habit, User, CompletedHabit
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
@@ -16,7 +16,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 def home(request):
     return render(request, 'habits/home.html')
 
-# AUTHENTICATION
+# AUTHENTICATION ---------------------------------------
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -65,7 +65,9 @@ def signup(request):
 def success(request):
     return render(request, 'habits/registration/success.html')
 
+
 # HABITS ---------------------------------------
+
 @login_required
 def habits(request):
     User = get_user_model()
@@ -91,13 +93,25 @@ def habits(request):
             dates.append(date)
         dates.reverse()
 
+        for habit in habits:
+            for date in dates:
+                habit_completed = CompletedHabit.objects.filter(
+                    habit=habit,
+                    completed_date=date,
+                ).exists()
+
+        
+        habit_form = HabitForm()
+
         # Context passed into template
         context = {
             'habits': habits,
             'dates': dates,
+            'habit_form': habit_form,
+            'habit_completed': habit_completed
+            # 'completed_habits': completed_habits,
         }
 
-        habit_form = HabitForm()
 
     return render(request, 'habits/habits.html', context)
     
@@ -106,5 +120,26 @@ def habits(request):
 
 def completed(request):
     if request.method == 'POST':
+        habit_id = request.POST.get('habit_id')
+        date = request.POST.get('date')
+
+        # Search through instances of Habit to find the one with matching id
+        habit = Habit.objects.get(id=habit_id)
+        completed_habit = CompletedHabit.objects.filter(
+            habit=habit,
+            completed_date=date,
+        ).first()
+
+        # if it's not in the db, put it in there
+        if completed_habit is None:
+            CompletedHabit.objects.create(
+                habit=habit,
+                completed_date=date,
+            ) 
+        else:
+            # if it is in db, delete it
+            completed_habit.delete()
+
         return redirect('habits')
+
     return render(request, 'habits/completed.html')
