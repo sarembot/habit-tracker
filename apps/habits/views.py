@@ -93,13 +93,6 @@ def habits(request):
             dates.append(date)
         dates.reverse()
 
-        for habit in habits:
-            for date in dates:
-                habit_completed = CompletedHabit.objects.filter(
-                    habit=habit,
-                    completed_date=date,
-                ).exists()
-
         
         habit_form = HabitForm()
 
@@ -108,8 +101,6 @@ def habits(request):
             'habits': habits,
             'dates': dates,
             'habit_form': habit_form,
-            'habit_completed': habit_completed
-            # 'completed_habits': completed_habits,
         }
 
 

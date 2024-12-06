@@ -43,19 +43,12 @@
                         {{ habit.name }} 
                     </td>
                     {% for date in dates %}
-                    <td class="border">
-                        <form method="post" action="{% url 'completed' %}">
+                    <td class="border text-center">
+                        <form method="POST" action="{% url 'completed' %}" style="margin:0">
                             {% csrf_token %}
                             <input type="hidden" name="habit_id" value="{{ habit.id }}">
-                            <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}"> 
-                            
-                                                     
-                            {% if habit_completed %} 
-                                <input type="submit" value="&#9745;">
-                            {% else %}
-                                <input type="submit" value="&#9746;">
-                            {% endif %}
-                           
+                            <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}">
+                            <button type="submit" class="btn btn-link habit-btn p-0">✗</button>
                         </form>
                     </td>
                     {% endfor %}
