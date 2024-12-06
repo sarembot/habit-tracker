@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, SignUpForm, HabitForm
+from .forms import LoginForm, SignUpForm, HabitForm, CompletedForm
 from .models import Habit, User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -65,31 +65,46 @@ def signup(request):
 def success(request):
     return render(request, 'habits/registration/success.html')
 
-#----------------------------------------------------
-
-# HABITS
+# HABITS ---------------------------------------
 @login_required
 def habits(request):
     User = get_user_model()
     current_user = User.objects.get(id=request.user.id)
     
-    # Dates for dashboard table:
-    today = datetime.today()
-    dates = []
-    for i in range(6, -1, -1):
-        date = today - timedelta(days=i) 
-        dates.append(date)
-    dates.reverse()
-    
     if request.method == 'POST':
-        form = HabitForm(request.POST)
-        if form.is_valid():
+        habit_form = HabitForm(request.POST)
+        if habit_form.is_valid():
             # Create new habit
-            habit = form.save(commit=False) # "pause" save 
+            habit = habit_form.save(commit=False) # "pause" save 
             habit.user = current_user # associate user with habit
             habit.save() # complete save to db
             return redirect('habits')
     else:
+        # Habits for dashboard table:
         habits = Habit.objects.filter(user=current_user) # find user's habits
-        form = HabitForm()
-    return render(request, 'habits/habits.html', {'form': form, 'habits': habits, 'dates': dates})
+        
+        # Dates for dashboard table:
+        today = datetime.today()
+        dates = []
+        for i in range(6, -1, -1):
+            date = today - timedelta(days=i) 
+            dates.append(date)
+        dates.reverse()
+
+        # Context passed into template
+        context = {
+            'habits': habits,
+            'dates': dates,
+        }
+
+        habit_form = HabitForm()
+
+    return render(request, 'habits/habits.html', context)
+    
+
+# COMPLETED HABITS ---------------------------------
+
+def completed(request):
+    if request.method == 'POST':
+        return redirect('habits')
+    return render(request, 'habits/completed.html')

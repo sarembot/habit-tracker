@@ -18,7 +18,7 @@
                     <div class="modal-body">
                         <form method="POST">
                             {% csrf_token %}
-                            {{ form.as_p }}
+                            {{ habit_form.as_p }}
                             <button type="submit" class="btn btn-primary">Save Habit</button>
                         </form>
                     </div>
@@ -29,18 +29,29 @@
         <h3>Current Habits</h3>
         <ul>
             <table class="border">
+                <!-- Column Headers -->
                 <tr class="border">
                     <th class="border">Habit</th>
                     {% for date in dates %}
                     <th class="border">{{ date.date }}</th>
                     {% endfor %}
                 </tr>
+                <!-- Row Headers -->
                 {% for habit in habits %}
                 <tr class="border">
                     <td class="border">
                         {{ habit.name }} 
                     </td>
-                    <td>hi</td>
+                    {% for date in dates %}
+                    <td class="border">
+                        <form method="post" action="{% url 'completed' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="habit_id" value="{{ habit.id }}">
+                            <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}">
+                            <input type="submit" value="☐">
+                        </form>
+                    </td>
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </table> 

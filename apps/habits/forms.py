@@ -27,3 +27,12 @@ class HabitForm(forms.ModelForm): #ModelForm automatically creates fields based 
         # widgets = {
         #     'name': forms.WidgetType(attrs)
         # }
+
+class CompletedForm(forms.Form):
+    habit_id = forms.IntegerField(widget=forms.HiddenInput())
+    date = forms.DateField(widget=forms.HiddenInput())
+    # TODO: notes = forms.CharField(required=False)
+    # TODO: Add custom scale for completion - eg. do 100 pushups, etc
+
+class UncompletedForm(forms.Form):
+    pass

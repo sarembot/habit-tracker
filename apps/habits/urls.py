@@ -14,4 +14,6 @@ urlpatterns = [
     # Habits
     path('habits', views.habits, name="habits"),
 
+    # Completed Habits
+    path('completed', views.completed, name="completed")
 ]
