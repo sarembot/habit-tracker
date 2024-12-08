@@ -38,7 +38,7 @@ class Habit(models.Model):
 # keep track of completed habits - use data for visualizations
 class CompletedHabit(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE)  
-    completed_date = models.DateField(auto_now_add=True)
+    completed_date = models.DateField()
 
     # User marks a habit as complete
     # Data sent to database

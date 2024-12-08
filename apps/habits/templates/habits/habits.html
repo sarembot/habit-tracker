@@ -2,6 +2,7 @@
 
 {% block content %}
 <div class="container page mt-5">
+
         <!-- Add Habit Button -->
         <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#addHabitModal">
             Add New Habit
@@ -25,17 +26,20 @@
                 </div>
             </div>
         </div>
+
         <!-- Habits Dashboard -->
         <h3>Current Habits</h3>
         <ul>
             <table class="border">
+
                 <!-- Column Headers -->
                 <tr class="border">
                     <th class="border">Habit</th>
-                    {% for date in dates %}
-                    <th class="border">{{ date.date }}</th>
+                    {% for str in date_strings %}
+                    <th class="border">{{ str }}</th>
                     {% endfor %}
                 </tr>
+
                 <!-- Row Headers -->
                 {% for habit in habits %}
                 <tr class="border">
@@ -44,12 +48,30 @@
                     </td>
                     {% for date in dates %}
                     <td class="border text-center">
-                        <form method="POST" action="{% url 'completed' %}" style="margin:0">
+                        <form method="POST" action="{% url 'completed' %}">
                             {% csrf_token %}
                             <input type="hidden" name="habit_id" value="{{ habit.id }}">
-                            <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}">
-                            <button type="submit" class="btn btn-link habit-btn p-0">✗</button>
-                        </form>
+                            <input type="hidden" name="date" value="{{ date }}">
+                            
+                            {% comment %}
+                            Look through completed_habits to see if this specific
+                            habit was completed on this specific date
+                            {% endcomment %}
+                            
+                            {% with is_completed=False %}
+                                {% for completed in completed_habits %}
+                                    {% if completed.habit.id == habit.id and completed.completed_date == date %}
+                                        {% with is_completed=True %}
+                                            <button type="submit" class="habit-btn">✓</button>
+                                        {% endwith %}
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if not is_completed %}
+                                    <button type="submit" class="habit-btn">✗</button>
+                                {% endif %}
+                            {% endwith %}
+                        </form> 
                     </td>
                     {% endfor %}
                 </tr>
