@@ -58,19 +58,17 @@
                             habit was completed on this specific date
                             {% endcomment %}
                             
-                            {% with is_completed=False %}
+                            {% with is_completed=False %} 
                                 {% for completed in completed_habits %}
-                                    {% if completed.habit.id == habit.id and completed.completed_date == date %}
+                                    {% if completed.habit.id == habit.id and completed.completed_date|date:"Y-m-d" == date|date:"Y-m-d" %}
                                         {% with is_completed=True %}
                                             <button type="submit" class="habit-btn">✓</button>
                                         {% endwith %}
+                                    {% elif not is_completed %}
+                                        <button type="submit" class="habit-btn">✗</button>
                                     {% endif %}
                                 {% endfor %}
-                                
-                                {% if not is_completed %}
-                                    <button type="submit" class="habit-btn">✗</button>
-                                {% endif %}
-                            {% endwith %}
+                            {% endwith %} 
                         </form> 
                     </td>
                     {% endfor %}
