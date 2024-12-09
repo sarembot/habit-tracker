@@ -29,7 +29,7 @@
 
         <!-- Habits Dashboard -->
         <h3>Current Habits</h3>
-        <ul>
+        
             <table class="border">
 
                 <!-- Column Headers -->
@@ -52,30 +52,23 @@
                             {% csrf_token %}
                             <input type="hidden" name="habit_id" value="{{ habit.id }}">
                             <input type="hidden" name="date" value="{{ date }}">
-                            
-                            {% comment %}
-                            Look through completed_habits to see if this specific
-                            habit was completed on this specific date
-                            {% endcomment %}
-                            
-                            {% with is_completed=False %} 
-                                {% for completed in completed_habits %}
-                                    {% if completed.habit.id == habit.id and completed.completed_date|date:"Y-m-d" == date|date:"Y-m-d" %}
-                                        {% with is_completed=True %}
-                                            <button type="submit" class="habit-btn">✓</button>
-                                        {% endwith %}
-                                    {% elif not is_completed %}
-                                        <button type="submit" class="habit-btn">✗</button>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endwith %} 
-                        </form> 
+                            <button type="submit" class="habit-btn btn">
+                                    {% if completion_status.habit.id.date %} ✓ {% else %} ✗ {% endif %}
+
+                                        <!-- if there is a record of the current habit completed on the current date
+
+                                        display check
+
+                                        else 
+                                        display ex -->
+                            </button>
+                        </form>
                     </td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
             </table> 
-        </ul>
+       
     </div>
 </div>
 {% endblock %}

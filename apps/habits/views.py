@@ -4,6 +4,7 @@ from .models import Habit, User, CompletedHabit
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -99,9 +100,36 @@ def habits(request):
 
         # For Displaying already completed habits
         completed_habits = CompletedHabit.objects.filter(habit__in=habits, completed_date__in=dates)  # only get the completed habits that match our habits/dates we are displaying
+        
+        # Store completion status for each habit 
+        completion_status = {}
+        
+        for habit in habits :
+            habit_key = f"{habit.id}"
+            # Nested dict for each habit 
+            completion_status[habit.id] = {}
 
+            # Get completion records for current habit 
+            completion_records = CompletedHabit.objects.filter(
+                habit=habit,
+                completed_date__in=dates
+            )
+
+            # Get dates habit was completed
+            completion_dates = {
+                record.completed_date.strftime('%Y-%m-%d')
+                for record in completion_records 
+            }
+
+            # For dashboard dates, store whether or not they were completed
+            for date in dates:
+                date_str = date.strftime('%Y-%m-%d')
+                # if date_str in completion_dates, create nested dict entry for habit
+                # stores bool
+                completion_status[habit.id][date_str] = date_str in completion_dates
+        
         habit_form = HabitForm()
-
+# 
         # Context passed into template
         context = {
             'habits': habits,
@@ -109,6 +137,7 @@ def habits(request):
             'habit_form': habit_form,
             'date_strings': date_strs,
             'completed_habits': completed_habits,
+            'completion_status': completion_status
         }
 
 
@@ -124,7 +153,6 @@ def completed(request):
         print("Received POST with habit_id:", habit_id, "and date:", date)
 
         cleaned_date = date.replace('a.m', 'AM').replace('p.m', 'PM')
-        
         date_obj = datetime.strptime(cleaned_date, '%b. %d, %Y, %I:%M %p.').date()
         print("Converted to date_obj:", date_obj)
 
@@ -135,11 +163,15 @@ def completed(request):
             habit=habit,
             completed_date=date_obj,
         ).first() 
+
+        # For JSON res
+        status = False
         
         # if it's in the db, remove it
         if completed_habit is not None:
             print("Deleting completed habit")
             completed_habit.delete() 
+            status = False
 
         # if it's not in the db, create a record
         else:
@@ -148,5 +180,8 @@ def completed(request):
                 habit=habit,
                 completed_date=date_obj,
             ) 
-       
-    return render(request, 'habits/completed.html')
+            status = True
+
+        return JsonResponse({'status': status}) 
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

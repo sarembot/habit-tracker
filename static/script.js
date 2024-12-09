@@ -4,19 +4,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     btns.forEach(btn => {
         btn.addEventListener('click', function(e) {
-            e.preventDefault(); // prevents form from doing a normal submission
-
+            e.preventDefault();
             const form = this.closest('form');
             
-            // Send data to server
+            // Add the CSRF token to our request
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            // Send data to server and wait for response
             fetch(form.action, {
                 method: 'POST',
-                body: new FormData(form)
+                body: new FormData(form),
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                // Only update the symbol after server confirms the change
+                this.textContent = data.status ? '✓' : '✗';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Optionally, you could add error handling here
             });
-
-            // Toggle symbol
-            this.textContent = this.textContent === '✗' ? '✓' : '✗';
-
-        })
-    })
-})
+        });
+    });
+});
