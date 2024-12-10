@@ -105,7 +105,6 @@ def habits(request):
         completion_status = {}
         
         for habit in habits :
-            habit_key = f"{habit.id}"
             # Nested dict for each habit 
             completion_status[habit.id] = {}
 
@@ -128,6 +127,12 @@ def habits(request):
                 # stores bool
                 completion_status[habit.id][date_str] = date_str in completion_dates
         
+       
+        print(completion_status[habit.id]) 
+            
+
+
+        
         habit_form = HabitForm()
 # 
         # Context passed into template
@@ -137,7 +142,7 @@ def habits(request):
             'habit_form': habit_form,
             'date_strings': date_strs,
             'completed_habits': completed_habits,
-            'completion_status': completion_status
+            'completion_status': completion_status,
         }
 
 
@@ -147,41 +152,43 @@ def habits(request):
 # COMPLETED HABITS ---------------------------------
 
 def completed(request):
+   
+
     if request.method == 'POST':
+        # For JSON res
+        status = False
         habit_id = request.POST.get('habit_id')
         date = request.POST.get('date')
-        print("Received POST with habit_id:", habit_id, "and date:", date)
 
         cleaned_date = date.replace('a.m', 'AM').replace('p.m', 'PM')
         date_obj = datetime.strptime(cleaned_date, '%b. %d, %Y, %I:%M %p.').date()
-        print("Converted to date_obj:", date_obj)
 
         # Search through instances of Habit to find the one with matching id
         habit = Habit.objects.get(id=habit_id)
-        print('Habit:', habit.name, habit.date_created)
         completed_habit = CompletedHabit.objects.filter(
             habit=habit,
             completed_date=date_obj,
         ).first() 
 
-        # For JSON res
-        status = False
-        
         # if it's in the db, remove it
         if completed_habit is not None:
-            print("Deleting completed habit")
             completed_habit.delete() 
             status = False
+            print("habit deleted")
 
         # if it's not in the db, create a record
         else:
-            print(f"Creating new completed habit with date completed date = {date_obj}")
             CompletedHabit.objects.create(
                 habit=habit,
                 completed_date=date_obj,
             ) 
             status = True
+            print('habit created')
 
         return JsonResponse({'status': status}) 
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# TODO: Add try/excepts for practice error checking
+# TODO: Fix persitance issue - look to fine tune habits.html template so that the correct symbol is shown on page reload. JS handles the rest.
