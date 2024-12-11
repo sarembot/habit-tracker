@@ -45,7 +45,7 @@
                 {% for habit in habits %}
                 <tr class="border">
                     <td class="border">
-                        {{ habit.name }} 
+                    <a href="habits/{{ habit.id }}"> {{ habit.name }}</a>
                     </td>
                     {% for date in dates %}
                     <td class="border text-center">
@@ -67,7 +67,6 @@
                 </tr>
                 {% endfor %}
             </table> 
-       
     </div>
 </div>
 {% endblock %}

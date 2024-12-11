@@ -13,6 +13,7 @@ urlpatterns = [
 
     # Habits
     path('habits', views.habits, name="habits"),
+    path('habits/<int:habit_id>', views.details, name='details'),
 
     # Completed Habits
     path('completed', views.completed, name="completed")

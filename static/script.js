@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())  // Parse the JSON response
             .then(data => {
                 // Only update the symbol after server confirms the change
-                this.textContent = data.status ? '✓' : '✗';
+                this.textContent = data.status ? '✔️' : '❌';
             })
             .catch(error => {
                 console.error('Error:', error);

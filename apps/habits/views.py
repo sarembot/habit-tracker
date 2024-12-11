@@ -18,6 +18,7 @@ def home(request):
     return render(request, 'habits/home.html')
 
 # AUTHENTICATION ---------------------------------------
+
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -127,12 +128,6 @@ def habits(request):
                 # stores bool
                 completion_status[habit.id][date_str] = date_str in completion_dates
         
-       
-        print(completion_status[habit.id]) 
-            
-
-
-        
         habit_form = HabitForm()
 # 
         # Context passed into template
@@ -149,14 +144,28 @@ def habits(request):
     return render(request, 'habits/habits.html', context)
     
 
+# INDIVIDUAL HABITS --------------------------------
+
+def details(request, habit_id):
+    # Find habit associated with current id
+    habit = Habit.objects.filter(id=habit_id) 
+
+    # Get habit name str value
+    habit_name = habit.values_list('name', flat=True).get()
+    print(habit_name)
+
+    context = {
+        'habit_id': habit_id,
+        'habit_name': habit_name,
+    }
+
+    return render(request, 'habits/details.html', context) 
+
 # COMPLETED HABITS ---------------------------------
 
 def completed(request):
-   
-
     if request.method == 'POST':
-        # For JSON res
-        status = False
+        status = False # For JSON response
         habit_id = request.POST.get('habit_id')
         date = request.POST.get('date')
 
@@ -191,4 +200,4 @@ def completed(request):
 
 
 # TODO: Add try/excepts for practice error checking
-# TODO: Fix persitance issue - look to fine tune habits.html template so that the correct symbol is shown on page reload. JS handles the rest.
+# TODO: Refactor views to use Classes
