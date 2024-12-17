@@ -75,6 +75,7 @@ def habits(request):
     User = get_user_model()
     current_user = User.objects.get(id=request.user.id)
     
+    # POST
     if request.method == 'POST':
         habit_form = HabitForm(request.POST)
         if habit_form.is_valid():
@@ -83,22 +84,20 @@ def habits(request):
             habit.user = current_user # associate user with habit
             habit.save() # complete save to db
             return redirect('habits')
+
+    # GET
     else:
         # Habits for dashboard table:
         habits = Habit.objects.filter(user=current_user) # find user's habits
         
         # Dates for dashboard table:
         today = datetime.today()
-        dates = []
-        date_strs = []
-        for i in range(6, -1, -1):
-            date = today - timedelta(days=i)
-            date_str = f"{date.strftime('%a').upper()} {date.strftime('%d')}"
-            dates.append(date)
-            date_strs.append(date_str)
+        dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
+        print(dates)
         dates.reverse()
-        date_strs.reverse()
+        date_strs = [d.strftime('%a, %d').upper() for d in dates]
 
+        
         # For Displaying already completed habits
         completed_habits = CompletedHabit.objects.filter(habit__in=habits, completed_date__in=dates)  # only get the completed habits that match our habits/dates we are displaying
         
