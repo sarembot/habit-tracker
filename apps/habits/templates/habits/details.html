@@ -1,5 +1,22 @@
 {% extends "habits/base.html" %}
 
 {% block content %}
-<h1>This page is for habit number {{ habit_id }}: {{ habit_name }}</h1>
+<h1> {{ habit.name }}</h1>
+
+<div class="container sm-6">
+    <div class="row p-1">
+        <div class="card col d-flex" style="width: 18rem;">
+            <span class="fs-1"> {{ streak }}</span> 
+            <div class="card-body">
+            <h5 class="card-title">Current Streak</h5>
+            </div>
+        </div>
+        <div class="card col" style="width: 18rem;">
+            <span class="fs-1"> {{ rate }}%</span>
+            <div class="card-body">
+            <h5 class="card-title">Completion Rate</h5>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

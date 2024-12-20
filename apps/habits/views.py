@@ -4,6 +4,7 @@ from .models import Habit, User, CompletedHabit
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.utils import timezone
 from django.http import JsonResponse
 
 User = get_user_model()
@@ -73,7 +74,6 @@ def success(request):
 @login_required
 def habits(request):
     User = get_user_model()
-    current_user = User.objects.get(id=request.user.id)
     
     # POST
     if request.method == 'POST':
@@ -81,22 +81,20 @@ def habits(request):
         if habit_form.is_valid():
             # Create new habit
             habit = habit_form.save(commit=False) # "pause" save 
-            habit.user = current_user # associate user with habit
+            habit.user = request.user # associate user with habit
             habit.save() # complete save to db
             return redirect('habits')
 
     # GET
     else:
         # Habits for dashboard table:
-        habits = Habit.objects.filter(user=current_user) # find user's habits
+        habits = Habit.objects.filter(user=request.user) # find user's habits
         
         # Dates for dashboard table:
         today = datetime.today()
-        dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
-        print(dates)
+        dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)] # The most recent 7 days
         dates.reverse()
-        date_strs = [d.strftime('%a, %d').upper() for d in dates]
-
+        date_strs = [d.strftime('%a %d').upper() for d in dates]
         
         # For Displaying already completed habits
         completed_habits = CompletedHabit.objects.filter(habit__in=habits, completed_date__in=dates)  # only get the completed habits that match our habits/dates we are displaying
@@ -123,12 +121,12 @@ def habits(request):
             # For dashboard dates, store whether or not they were completed
             for date in dates:
                 date_str = date.strftime('%Y-%m-%d')
+
                 # if date_str in completion_dates, create nested dict entry for habit
-                # stores bool
-                completion_status[habit.id][date_str] = date_str in completion_dates
+                completion_status[habit.id][date_str] = date_str in completion_dates # stores bool
         
         habit_form = HabitForm()
-# 
+
         # Context passed into template
         context = {
             'habits': habits,
@@ -139,23 +137,47 @@ def habits(request):
             'completion_status': completion_status,
         }
 
-
     return render(request, 'habits/habits.html', context)
     
 
 # INDIVIDUAL HABITS --------------------------------
+    # Simple analytics for each of the user's habits
 
 def details(request, habit_id):
     # Find habit associated with current id
-    habit = Habit.objects.filter(id=habit_id) 
+    habit = Habit.objects.get(id=habit_id)
 
-    # Get habit name str value
-    habit_name = habit.values_list('name', flat=True).get()
-    print(habit_name)
+    print(habit.name)
 
+    completed_habits = CompletedHabit.objects.filter(
+        habit=habit
+    ).order_by('-completed_date')
+
+    print(completed_habits)
+
+    # Completion Rate
+    days = (timezone.now().date() - habit.date_created.date()).days # Days since habit was created
+    total_complete = completed_habits.count()
+    rate = round(((total_complete / days) if days > 0 else 0), 1)
+
+    # Streak
+    current_streak = 0
+    if completed_habits.exists():
+        current_date = completed_habits.first().completed_date # most recent
+
+        for c in completed_habits:
+            if c.completed_date == current_date:
+                current_streak += 1
+                current_date -= timedelta(days=1)
+            else:
+                break
+
+        
     context = {
         'habit_id': habit_id,
-        'habit_name': habit_name,
+        'habit': habit,
+        'rate': rate,
+        'streak': current_streak,
     }
 
     return render(request, 'habits/details.html', context) 
@@ -169,7 +191,8 @@ def completed(request):
         date = request.POST.get('date')
 
         cleaned_date = date.replace('a.m', 'AM').replace('p.m', 'PM')
-        date_obj = datetime.strptime(cleaned_date, '%b. %d, %Y, %I:%M %p.').date()
+        date_obj = datetime.strptime(cleaned_date, '%b. %d, %Y, %I:%M, %p.').date()
+        print(date_obj)
 
         # Search through instances of Habit to find the one with matching id
         habit = Habit.objects.get(id=habit_id)
