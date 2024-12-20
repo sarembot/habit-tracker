@@ -188,11 +188,11 @@ def completed(request):
     if request.method == 'POST':
         status = False # For JSON response
         habit_id = request.POST.get('habit_id')
-        date = request.POST.get('date')
 
+        date = request.POST.get('date')
         cleaned_date = date.replace('a.m', 'AM').replace('p.m', 'PM')
-        date_obj = datetime.strptime(cleaned_date, '%b. %d, %Y, %I:%M, %p.').date()
-        print(date_obj)
+        date_obj = datetime.strptime(cleaned_date, '%b. %d, %Y, %I:%M %p.').date()
+        print("Date Object: ", date_obj)
 
         # Search through instances of Habit to find the one with matching id
         habit = Habit.objects.get(id=habit_id)
