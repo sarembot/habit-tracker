@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 User = get_user_model()
 
@@ -70,7 +70,7 @@ def success(request):
 
 
 # HABITS ---------------------------------------
-
+# Handles habit creation/listing
 @login_required
 def habits(request):
     User = get_user_model()
@@ -138,7 +138,18 @@ def habits(request):
         }
 
     return render(request, 'habits/habits.html', context)
+
     
+# HABIT DELETION -----------------------------------
+def delete_habit(request, habit_id):
+    try:
+        habit = Habit.objects.get(id=habit_id)
+        habit.delete()
+    except Habit.DoesNotExist:
+        raise Http404("Non existant habit.")
+
+    return redirect('habits')
+
 
 # INDIVIDUAL HABITS --------------------------------
     # Simple analytics for each of the user's habits

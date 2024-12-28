@@ -15,3 +15,7 @@
 }
 
 .nav-link, .nav-item, .navbar-nav { padding:0; }
+
+.habit-link {
+   text-decoration: none; 
+}

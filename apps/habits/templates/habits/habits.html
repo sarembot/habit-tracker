@@ -3,11 +3,15 @@
 
 {% block content %}
 <div class="container page mt-5">
+    <div class="row">
+        <div class="col-8 d-flex justify-content-start align-items-center">
+            <h2 class="p-0">Current Habits</h2>
+        </div>
 
         <!-- Add Habit Button -->
-        <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#addHabitModal">
-            Add New Habit
-        </button>
+        <div class="p-0 col-4 d-flex justify-content-center align-items-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHabitModal">+</button>
+        </div>
     
         <!-- Modal -->
         <div class="modal fade" id="addHabitModal" tabindex="-1" aria-labelledby="addHabitModalLabel" aria-hidden="true">
@@ -27,46 +31,53 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Habits Dashboard -->
-        <h3>Current Habits</h3>
-        
-            <table class="border">
+    <!-- Habits Dashboard -->
+    <div class="container d-flex justify-content-center align-items-center">
+        <table class="border">
 
-                <!-- Column Headers -->
-                <tr class="border">
-                    <th class="border">Habit</th>
-                    {% for str in date_strings %}
-                    <th class="border">{{ str }}</th>
-                    {% endfor %}
-                </tr>
-
-                <!-- Row Headers -->
-                {% for habit in habits %}
-                <tr class="border">
-                    <td class="border">
-                    <a href="habits/{{ habit.id }}"> {{ habit.name }}</a>
-                    </td>
-                    {% for date in dates %}
-                    <td class="border text-center">
-                        <form method="POST" action="{% url 'completed' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="habit_id" value="{{ habit.id }}">
-                            <input type="hidden" name="date" value="{{ date }}">
-                            <button type="submit" class="habit-btn btn">
-                                    {% with date=date|date:'Y-m-d' %}
-                                        {% if completion_status|get_item:habit.id|get_item:date %}      ✔️ 
-                                        {% else %}
-                                            ❌
-                                        {% endif %}
-                                    {% endwith %}
-                            </button>
-                        </form>
-                    </td>
-                    {% endfor %}
-                </tr>
+            <!-- Column Headers -->
+            <tr class="border">
+                <th class="border">Habit</th>
+                {% for str in date_strings %}
+                <th class="border">{{ str }}</th>
                 {% endfor %}
-            </table> 
+            </tr>
+
+            <!-- Row Headers -->
+            {% for habit in habits %}
+            <tr class="border">
+                <td class="border">
+                    <p class="p-0 text-left habit-link"><a href="habits/{{ habit.id }}" class="link-underline-secondary" id="habit-link"> {{ habit.name }}</a></p>
+                </td>
+                
+                {% for date in dates %}
+                <td class="border text-center">
+                    <form method="POST" action="{% url 'completed' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="habit_id" value="{{ habit.id }}">
+                        <input type="hidden" name="date" value="{{ date }}">
+                        <button type="submit" class="habit-btn btn">
+                                {% with date=date|date:'Y-m-d' %}
+                                    {% if completion_status|get_item:habit.id|get_item:date %}      ✔️ 
+                                    {% else %}
+                                        ❌
+                                    {% endif %}
+                                {% endwith %}
+                        </button>
+                    </form>
+                </td>
+                {% endfor %}
+                <td>
+                    <form method="POST" action="{% url 'delete_habit' habit.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">☭</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table> 
     </div>
 </div>
 {% endblock %}
