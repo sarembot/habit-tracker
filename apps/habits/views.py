@@ -12,9 +12,6 @@ User = get_user_model()
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
-# request param contains all the info about the current HTTP request
-
-
 def home(request):
     return render(request, 'habits/home.html')
 
@@ -167,9 +164,13 @@ def details(request, habit_id):
     print(completed_habits)
 
     # Completion Rate
-    days = (timezone.now().date() - habit.date_created.date()).days # Days since habit was created
+    days = (timezone.now().date() - habit.date_created.date()).days + 1 # Days since habit was created
+    print(days)
     total_complete = completed_habits.count()
-    rate = round(((total_complete / days) if days > 0 else 0), 1)
+    print(total_complete)
+    rate = round(((total_complete / days) * 100 if days > 0 else 0), 0) 
+
+    print(f"Streak: {days}\nRate: {rate}")
 
     # Streak
     current_streak = 0

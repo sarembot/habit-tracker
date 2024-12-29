@@ -10,7 +10,10 @@
 
         <!-- Add Habit Button -->
         <div class="p-0 col-4 d-flex justify-content-center align-items-center">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHabitModal">+</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHabitModal">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+
         </div>
     
         <!-- Modal -->
@@ -60,9 +63,10 @@
                         <input type="hidden" name="date" value="{{ date }}">
                         <button type="submit" class="habit-btn btn">
                                 {% with date=date|date:'Y-m-d' %}
-                                    {% if completion_status|get_item:habit.id|get_item:date %}      ✔️ 
+                                    {% if completion_status|get_item:habit.id|get_item:date %}    
+                                        <i class="p-0 fa-solid fa-check"></i>
                                     {% else %}
-                                        ❌
+                                        <i class="p-0 fa-solid fa-x"></i> 
                                     {% endif %}
                                 {% endwith %}
                         </button>
@@ -72,7 +76,9 @@
                 <td>
                     <form method="POST" action="{% url 'delete_habit' habit.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">☭</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa-solid fa-trash p-0"></i>
+                        </button>
                     </form>
                 </td>
             </tr>
