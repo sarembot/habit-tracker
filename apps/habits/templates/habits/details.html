@@ -4,6 +4,7 @@
 <h1 class="pt-5 text-warning">{{ habit.name }}</h1>
 
 <div class="container sm-6">
+    <h3>Overview</h3>
     <div class="row p-1">
         <div class="card col border-primary m-2 justify-content-center align-items-center" style="width: 18rem;">
             <span class="fs-1">{{ streak }} days</span> 
@@ -15,6 +16,16 @@
             <span class="fs-1">{{ rate }}%</span>
             <div class="card-body">
             <h5 class="card-title">Completion Rate</h5>
+        </div>
+    </div>
+</div>
+<div class="container sm-12">
+    <h3>Calendar</h3>
+    <div class="row p-1 border-primary">
+        <div class="card col border-primary justify-content-cetner align-items-center">
+            <div class="card-body">
+                {{ cal }}
+            </div>
         </div>
     </div>
 </div>

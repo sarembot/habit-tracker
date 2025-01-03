@@ -4,7 +4,9 @@ from .models import Habit, User, CompletedHabit
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+import calendar
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.http import JsonResponse, Http404
 
 User = get_user_model()
@@ -170,7 +172,7 @@ def details(request, habit_id):
     print(total_complete)
     rate = round(((total_complete / days) * 100 if days > 0 else 0), 0) 
 
-    print(f"Streak: {days}\nRate: {rate}")
+    print(f"Rate: {rate}")
 
     # Streak
     current_streak = 0
@@ -184,12 +186,23 @@ def details(request, habit_id):
             else:
                 break
 
+    print(f"Streak: {current_streak}")
+
+    # Weekly counts bar graph
+    # TODO: get completed habit count for each week since creation
+    # TODO: create bar graph - library?
+    
+    # Calendar - shows completion for each day of the month
+    html_cal = calendar.HTMLCalendar().formatmonth(datetime.now().year, datetime.now().month)
+
+    #TODO: if habit completed on date, change style to primary
         
     context = {
         'habit_id': habit_id,
         'habit': habit,
         'rate': rate,
         'streak': current_streak,
+        'cal': mark_safe(html_cal), # mark_safe - allows HTML to render in template
     }
 
     return render(request, 'habits/details.html', context) 
