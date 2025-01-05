@@ -19,3 +19,7 @@
 .habit-link {
    text-decoration: none; 
 }
+
+.cal-completed {
+    background-color: blue;
+}

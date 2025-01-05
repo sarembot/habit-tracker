@@ -8,6 +8,8 @@ import calendar
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse, Http404
+from html.parser import HTMLParser
+from bs4 import BeautifulSoup
 
 User = get_user_model()
 
@@ -163,13 +165,11 @@ def details(request, habit_id):
         habit=habit
     ).order_by('-completed_date')
 
-    print(completed_habits)
+    print(completed_habits[0].completed_date)
 
     # Completion Rate
     days = (timezone.now().date() - habit.date_created.date()).days + 1 # Days since habit was created
-    print(days)
     total_complete = completed_habits.count()
-    print(total_complete)
     rate = round(((total_complete / days) * 100 if days > 0 else 0), 0) 
 
     print(f"Rate: {rate}")
@@ -193,16 +193,31 @@ def details(request, habit_id):
     # TODO: create bar graph - library?
     
     # Calendar - shows completion for each day of the month
+    # TODO: MAKE BETTER - validation, testing, multiple months, etc
     html_cal = calendar.HTMLCalendar().formatmonth(datetime.now().year, datetime.now().month)
+    
+    soup = BeautifulSoup(html_cal, 'lxml')
 
-    #TODO: if habit completed on date, change style to primary
-        
+    # parse day cells
+    tds = soup.find_all('td')
+
+    completed_dates = [] 
+    for ch in completed_habits:
+        completed_dates.append(str(ch.completed_date.day))
+
+    completed_dates.reverse()
+
+    # Check if day has been completed
+    for td in tds:
+        if str(td.string) in completed_dates:
+           td['class'] = 'cal-completed'
+    
     context = {
         'habit_id': habit_id,
         'habit': habit,
         'rate': rate,
         'streak': current_streak,
-        'cal': mark_safe(html_cal), # mark_safe - allows HTML to render in template
+        'cal': mark_safe(soup.prettify), # mark_safe - allows HTML to render in template
     }
 
     return render(request, 'habits/details.html', context) 
