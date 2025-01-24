@@ -1,13 +1,11 @@
-{% extends "habits/base.html" %}  {# if you have a base template #}
-
-{% block content %}
+{% extends "habits/base.html" %} {# if you have a base template #} {% block
+content %}
 
 <div class="container page">
   <h2>Login</h2>
   <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit">
-  </form> 
+    {% csrf_token %} {{ form.as_p }}
+    <input type="submit" />
+  </form>
 </div>
 {% endblock %}
