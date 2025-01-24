@@ -1,5 +1,7 @@
-{% extends "habits/base.html" %} {% load habit_filters %} {% block content %}
+{% extends "habits/base.html" %} 
+{% load habit_filters %}
 
+{% block content %}
 <!-- Header  -->
 <div class="container page mt-5">
   <div class="row">
@@ -82,8 +84,8 @@
             <input type="hidden" name="habit_id" value="{{ habit.id }}" />
             <input type="hidden" name="date" value="{{ date }}" />
             <button type="submit" class="habit-btn btn">
-              {% with date=date|date:'Y-m-d' %} {% if
-              completion_status|get_item:habit.id|get_item:date %}
+              {% with date=date|date:'Y-m-d' %} 
+              {% if completion_status|get_item:habit.id|get_item:date %}
               <i class="p-0 fa-solid fa-check"></i>
               {% else %}
               <i class="p-0 fa-solid fa-x"></i>

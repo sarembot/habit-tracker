@@ -1,9 +1,11 @@
-{% extends "habits/base.html" %} {% block content %}
+{% extends "habits/base.html" %} 
+
+{% block content %}
 <div class="container page">
   <h2>Sign Up</h2>
   <form action="{% url 'signup' %}" method="post">
-    {% csrf_token %} {% if form.errors %} {{ form.errors }} {% endif %} {{
-    form.as_p }}
+    <!-- {% csrf_token %} {% if form.errors %} {{ form.errors }} {% endif %} {{ -->
+    {{ form.as_p }}
     <input type="submit" />
   </form>
 </div>

@@ -30,6 +30,13 @@ def login(request):
 
             user = authenticate(request, username=username, password=password)
 
+            if user is None:
+                try:
+                    user = User.objecs.get(email=username)
+                    user = authenticate(request, username=user.username, password=password)
+                except User.DoesNotExist:
+                    user = None
+            
             if user is not None:
                 # user is found and password matches
                 auth_login(request, user) # create a session

@@ -17,11 +17,15 @@
   </head>
   <body>
     <header class="p-0">
-      <nav class="navbar fixed-top navbar-expand-sm border p-0 m-0">
+      <nav class="navbar fixed-top navbar-expand-sm border p-0 m-0 bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand fs-5" href="{% url 'home' %}">Habit Tracker</a>
+          <a
+            class="navbar-brand fs-5 text-secondary fw-bold"
+            href="{% url 'home' %}"
+            >Habito Traquito</a
+          >
           <button
-            class="navbar-toggler p-1 border-dark"
+            class="navbar-toggler p-1 border-dark bg-secondary"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -34,7 +38,9 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="container-fluid justify-content-end p-0">
               {% if user.is_authenticated %}
-              <ul class="navbar-nav me-auto mb-0 d-flex justify-content-end">
+              <ul
+                class="navbar-nav me-auto mb-0 d-flex justify-content-end text-danger"
+              >
                 <li class="nav-item">
                   <a
                     class="nav-link hover-transition"
@@ -50,7 +56,8 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link hover-transition" href="{% url 'logout' %}"
-                    >LOGOUT</a >
+                    >LOGOUT</a
+                  >
                 </li>
               </ul>
               {% else %}
