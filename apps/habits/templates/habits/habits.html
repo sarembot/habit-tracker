@@ -1,7 +1,5 @@
-{% extends "habits/base.html" %} 
-{% load habit_filters %}
-
-{% block content %}
+{% extends "habits/base.html" %} {% load habit_filters %} {% load
+crispy_forms_tags %} {% load crispy_forms_filters %} {% block content %}
 <!-- Header  -->
 <div class="container page mt-5">
   <div class="row">
@@ -41,8 +39,9 @@
             ></button>
           </div>
           <div class="modal-body">
-            <form method="POST">
-              {% csrf_token %} {{ habit_form.as_p }}
+            <form method="POST" novalidate>
+              {% csrf_token %} {{ habit_form|crispy }}
+
               <button type="submit" class="btn btn-primary">Save Habit</button>
             </form>
           </div>
@@ -53,24 +52,24 @@
 
   <!-- Habits Dashboard -->
   <div class="container d-flex justify-content-center align-items-center">
-    <table class="border">
+    <table class="table">
       <!-- Column Headers -->
-      <tr class="border">
-        <th class="border">Habit</th>
-        {% for str in date_strings %}
-        <th class="border">{{ str }}</th>
-        {% endfor %}
-      </tr>
-
+      <thead>
+        <tr class="border">
+          <th scope="col" class="border px-3">Habit</th>
+          {% for str in date_strings %}
+          <th scope="col" class="border px-3">{{ str }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
       <!-- Row Headers -->
       {% for habit in habits %}
       <tr class="border">
         <td class="border">
-          <p class="p-0 text-left habit-link">
-            <a
+          <p class="p-0 m-0 text-left">
+            <a id="{{ habit.name }}Btn"
               href="habits/{{ habit.id }}"
-              class="link-underline-secondary"
-              id="habit-link"
+              class="p-0 m-0 habit-link"
             >
               {{ habit.name }}</a
             >
@@ -89,7 +88,8 @@
               <i class="p-0 fa-solid fa-check"></i>
               {% else %}
               <i class="p-0 fa-solid fa-x"></i>
-              {% endif %} {% endwith %}
+              {% endif %} 
+              {% endwith %}
             </button>
           </form>
         </td>
