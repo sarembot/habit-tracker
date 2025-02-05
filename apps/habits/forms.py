@@ -1,5 +1,7 @@
 from django import forms
 from .models import Habit
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Div, Field, Row, Column
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username or Email')
@@ -17,6 +19,13 @@ class HabitForm(forms.ModelForm): #ModelForm automatically creates fields based 
         widget=forms.RadioSelect, # instead of default dropdown
         initial='daily'
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper() # Customizes form rendering
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Create Habit'))
+        
     class Meta:
         model = Habit
         fields = [
