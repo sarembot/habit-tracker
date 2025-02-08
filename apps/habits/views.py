@@ -10,6 +10,8 @@ from django.utils.safestring import mark_safe
 from django.http import JsonResponse, Http404
 from html.parser import HTMLParser
 from bs4 import BeautifulSoup
+from django.core.serializers import serialize
+import json
 
 User = get_user_model()
 
@@ -193,9 +195,21 @@ def details(request, habit_id):
             else:
                 break
 
-    print(f"Streak: {current_streak}")
-
     # Weekly counts bar graph
+    weekly_counts = []
+
+    current_week_start = habit.date_created.date()  
+
+    # while 
+    while current_week_start <= timezone.now().date():
+        weekend = current_week_start + timedelta(days=6)
+        count = completed_habits.filter(
+            completed_date__range=[current_week_start, weekend]
+        ).count()
+        weekly_counts.append(count)
+        current_week_start = weekend + timedelta(days=1)
+
+    print(weekly_counts)
     # TODO: get completed habit count for each week since creation
     # TODO: create bar graph - library?
     
@@ -225,6 +239,7 @@ def details(request, habit_id):
         'rate': rate,
         'streak': current_streak,
         'cal': mark_safe(soup.prettify), # mark_safe - allows HTML to render in template
+        'weekly_counts': json.dumps(weekly_counts) # pass in as json
     }
 
     return render(request, 'habits/details.html', context) 

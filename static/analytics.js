@@ -1,7 +1,10 @@
 // import Chart from 'chart.js/auto';
 "use strict";
 
-const ctx = document.getElementById('myChart');
+
+// const weeklyCounts = JSON.parse();
+
+const ctx = document.getElementById('weeklyChart');
 
   new Chart(ctx, {
     type: 'bar',
