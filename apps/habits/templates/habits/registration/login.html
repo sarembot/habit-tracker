@@ -4,7 +4,8 @@
 <div class="container page">
   <h2>Login</h2>
   <form method="post" action="{% url 'login' %}">
-    {% csrf_token %} {{ form }}
+    {% csrf_token %} 
+    {{ form }}
     <input type="submit" />
   </form>
 </div>
